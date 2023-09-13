@@ -1,0 +1,92 @@
+#include "WiFiS3.h"
+#include "arduino_secrets.h"
+
+char ssid[] = SECRET_SSID;
+char pass[] = SECRET_PASS;
+
+int status = WL_IDLE_STATUS;
+
+unsigned int udpPort = 2390;  // local port to listen on
+
+IPAddress serverIP = IPAddress(192, 48, 56, 2);
+IPAddress remoteIP = IPAddress(192, 48, 56, 3);
+
+char sendBuffer[256];
+char receiveBuffer[256];
+
+WiFiUDP Udp;
+
+void setup() {
+  //Initialize serial and wait for port to open:
+
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  Serial.begin(9600);
+  while (!Serial) {
+    ;  // wait for serial port to connect. Needed for native USB port only
+  }
+  delay(1000);
+  WiFi.config(serverIP);
+
+  status = WiFi.beginAP(ssid, pass);
+
+
+  if (status != WL_AP_LISTENING) {
+    Serial.println("Creating access point failed");
+    // don't continue
+    while (true)
+      ;
+  } else {
+    Serial.println("Creating AP in 10sec...");
+  }
+  delay(10000);
+
+  Udp.begin(udpPort);
+}
+
+int packetSize = 0;
+unsigned long tAlive = 0;
+bool lOn = false;
+
+void loop() {
+
+  readUdp();
+
+  alive();
+
+  if (Serial.available()) {
+    char c = Serial.read();
+    if ((c != '\n') && (c != '\r')) {
+      sendUdp(c);
+    }
+  }
+}
+
+void sendUdp(char m) {
+  Udp.beginPacket(remoteIP, udpPort);
+  Udp.write(m);
+  Udp.endPacket();
+}
+
+void readUdp() {
+  if (Udp.parsePacket()) {
+    Udp.read(receiveBuffer, 1);
+    Serial.write(receiveBuffer);
+  }
+}
+
+void alive() {
+  if ((millis() - tAlive) > 1000) {
+    tAlive = millis();
+    digitalWrite(LED_BUILTIN, HIGH);
+    lOn = true;
+  }
+
+  if (lOn) {
+    if ((millis() - tAlive) > 50) {
+      tAlive = millis();
+      digitalWrite(LED_BUILTIN, LOW);
+      lOn = false;
+    }
+  }
+}
