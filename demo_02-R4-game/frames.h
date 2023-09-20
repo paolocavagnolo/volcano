@@ -1,19 +1,19 @@
 const uint32_t s_opensource[] = {
-  0x3c042099,
-  0xa50a50a,
-  0x50420240,
+  0xf010826,
+  0x42942942,
+  0x94108090,
 };
 
 const uint32_t s_is[] = {
-  0x10008,
-  0xf400801,
-  0x0,
+  0x2,
+	0x103e80,
+	0x10020000,
 };
 
 const uint32_t s_love[] = {
-  0x63094888,
-  0x88084102,
-  0x20140080,
+  0x18c25222,
+	0x22021040,
+	0x88050020,
 };
 
 const uint32_t s_arduino[] = {
@@ -35,9 +35,9 @@ const uint32_t s_keepcalm[] = {
 };
 
 const uint32_t s_and[] = {
-  0x20020,
-  0xf802002,
-  0x0,
+  0x2002,
+	0xf80200,
+	0x20000000,
 };
 
 const uint32_t s_eat[] = {
@@ -47,15 +47,15 @@ const uint32_t s_eat[] = {
 };
 
 const uint32_t s_code[] = {
-  0x24042,
-  0x8104202,
-  0x40000000,
+  0x9010,
+	0x82041080,
+	0x90000000,
 };
 
 const uint32_t s_peace[] = {
-  0x38054092,
-  0x920ba05,
-  0x40380000,
+  0xe015024,
+	0x82482e81,
+	0x500e0000,
 };
 
 const uint32_t blank[] = {
