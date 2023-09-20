@@ -1,9 +1,8 @@
 #include "WiFiS3.h"
 #include "arduino_secrets.h"
 
-
-char ssid[] = SECRET_SSID;
-char pass[] = SECRET_PASS;
+char ssid[] = "Demo2023";
+char pass[] = "32020m3D";
 
 int status = WL_IDLE_STATUS;
 
@@ -74,6 +73,8 @@ int s_index = 0;
 int state = 0;
 int sentence = 0;
 
+bool myTurn = true;
+
 void loop() {
 
   if (state == 0) {
@@ -83,24 +84,33 @@ void loop() {
     firstWaiting = true;
     firstGame = true;
 
-    if ((millis() - tIdle) > 10000) {
-      tIdle = millis();
-      printSentence();
-    }
+    if (myTurn) {
+      if ((millis() - tIdle) > 10000) {
+        tIdle = millis();
+        printSentence();
+      }
 
-    if (Serial.available()) {
-      char c = Serial.read();
-      int a = c;
-      if ((c != '\n') && (c != '\r')) {
-        if ((a <= 48) || (a >= 54)) {
-          errInput();
-          tIdle = millis();
-        } else {
-          sendUdp(c);
-          state = 2;
+      if (Serial.available()) {
+        char c = Serial.read();
+        int a = c;
+        if ((c != '\n') && (c != '\r')) {
+          if ((a <= 48) || (a >= 54)) {
+            errInput();
+            tIdle = millis();
+          } else {
+            sendUdp(c);
+            state = 2;
+            myTurn = false;
+          }
         }
       }
+    } else {
+      if ((millis() - tIdle) > 10000) {
+        tIdle = millis();
+        printWaiting();
+      }
     }
+
   }
 
   else if (state == 1) {
@@ -194,6 +204,7 @@ void readUdp() {
     if ((a > 48) && (a < 54)) {
       state = 1;
       sentence = a - 48;
+      myTurn = true;
     }
   }
 }
@@ -210,6 +221,15 @@ void waiting() {
     Serial.println();
   }
   Serial.print("Waiting for the other team to guess the sentence ");
+}
+
+void printWaiting() {
+  for (uint8_t i = 0; i < 8; i++) {
+    Serial.println();
+  }
+
+  Serial.println("Waiting for the other team to start a game...");
+  Serial.println("");
 }
 
 void printSentence() {
