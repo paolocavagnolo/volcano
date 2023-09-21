@@ -9,13 +9,14 @@ So, if you press reset on the Nano ESP32 while it is connected to the shield it 
 ## CONNECTIONS
 
 
-|---------------|---------|
-| potentiometer | **A0**  |
-|  light sensor | **A2**  |
-|    microphone | **A6**  |
-|           IMU | **I2C** |
-|        button | **D2**  |
-|           led | **D4**  |
+|   _module _   |  _port_ |
+|:-------------:|:-------:|
+| potentiometer |  **A0** |
+|  light sensor |  **A2** |
+|   microphone  |  **A6** |
+|      IMU      | **I2C** |
+|     button    |  **D2** |
+|      led      |  **D4** |
 
 
 ## UPLOAD
