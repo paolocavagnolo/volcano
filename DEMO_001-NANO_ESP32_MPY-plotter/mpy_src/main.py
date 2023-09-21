@@ -65,17 +65,8 @@ def readImu():
             return (pitch,roll)
 
 state = 0       
-minPot = 0
-maxPot = 4095
-
-minLDR = 0
-maxLDR = 5000
-
-minMIC = 0
-maxMIC = 4095
-
-minIMU = -180
-maxIMU = 180
+minVal = 0
+maxVal = 4095
 
 while True:
 
@@ -99,26 +90,28 @@ while True:
         if (time.ticks_ms() - tPOT) > 50:
             tPOT = time.ticks_ms()
             vPOT = pot.read()
-            led.duty_u16(int(vPOT/maxPot*65535))
-            print("%d,%d,%d" % (vPOT,minPot,maxPot))
+            led.duty_u16(int(vPOT/maxVal*65535))
+            print("%d,%d,%d" % (vPOT,minVal,maxVal))
     elif state == 1:
         if (time.ticks_ms() - tLDR) > 100:
             tLDR = time.ticks_ms()
             vLDR = ldr.read()*ldr.read()/1000
-            if vLDR > maxLDR:
-                vLDR = maxLDR
+            if vLDR > maxVal:
+                vLDR = maxVal
             led.duty_u16(int(vLDR/maxLDR*65535))
-            print("%.1f,%d,%d" % (vLDR,minLDR,maxLDR))
+            print("%.1f,%d,%d" % (vLDR,minVal,maxVal))
     elif state == 2:
         if (time.ticks_ms() - tMIC) > 50:
             tMIC = time.ticks_ms()
             vMIC = mic.read()
-            led.duty_u16(int(vMIC/maxMIC*65535))
-            print("%d,%d,%d" % (vMIC,minMIC,maxMIC))
+            led.duty_u16(int(vMIC/maxVal*65535))
+            print("%d,%d,%d" % (vMIC,minVal,maxVal))
     elif state == 3:
         if (time.ticks_ms() - tIMU) > 110:
             tIMU = time.ticks_ms()
             p,r = readImu()
-            led.duty_u16(int((abs(p)/180)*65535))
-            print("%d,%d,%d,%d" % (p,r,minIMU,maxIMU))
+            p = int((p + 180)/360*maxVal)
+            r = int((r + 180)/360*maxVal)
+            led.duty_u16(int((r/maxVal)*65535))
+            print("%d,%d,%d,%d" % (p,r,minVal,maxVal))
         
