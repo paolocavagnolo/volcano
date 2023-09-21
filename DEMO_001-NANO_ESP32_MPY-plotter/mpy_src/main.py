@@ -98,7 +98,7 @@ while True:
             vLDR = ldr.read()*ldr.read()/1000
             if vLDR > maxVal:
                 vLDR = maxVal
-            led.duty_u16(int(vLDR/maxLDR*65535))
+            led.duty_u16(int(vLDR/maxVal*65535))
             print("%.1f,%d,%d" % (vLDR,minVal,maxVal))
     elif state == 2:
         if (time.ticks_ms() - tMIC) > 50:
