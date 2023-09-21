@@ -1,5 +1,4 @@
 #include "WiFiS3.h"
-#include "arduino_secrets.h"
 
 char ssid[] = "Demo2023";
 char pass[] = "32020m3D";
