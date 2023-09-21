@@ -8,6 +8,10 @@ thats is ok for a normal Arduino Nano, but for the Nano ESP32, on the right side
 
 So, if you press reset on the Nano ESP32 while it is connected to the shield it will enter in bootloader mode. To avoid this I've cut the RST pin on the Nano board
 
+Possible solutions:
+- not press the reset button
+- not use the grove shield (plug the nano esp32 in a breadboard and connect it with jumper wires with the shield in the Sensor Kit)
+
 ### NOTE 2
 If you want to change the sketch during the demo is mandatory to **close the Arduino IDE before connecting with the Arduino Labs for Micropython**.
 
