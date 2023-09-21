@@ -87,7 +87,7 @@ while True:
             time.sleep(0.1) #debounce
 
     if state == 0:
-        if (time.ticks_ms() - tPOT) > 50:
+        if (time.ticks_ms() - tPOT) > 100:
             tPOT = time.ticks_ms()
             vPOT = pot.read()
             led.duty_u16(int(vPOT/maxVal*65535))
@@ -101,13 +101,13 @@ while True:
             led.duty_u16(int(vLDR/maxVal*65535))
             print("%.1f,%d,%d" % (vLDR,minVal,maxVal))
     elif state == 2:
-        if (time.ticks_ms() - tMIC) > 50:
+        if (time.ticks_ms() - tMIC) > 100:
             tMIC = time.ticks_ms()
             vMIC = mic.read()
             led.duty_u16(int(vMIC/maxVal*65535))
             print("%d,%d,%d" % (vMIC,minVal,maxVal))
     elif state == 3:
-        if (time.ticks_ms() - tIMU) > 110:
+        if (time.ticks_ms() - tIMU) > 100:
             tIMU = time.ticks_ms()
             p,r = readImu()
             p = int((p + 180)/360*maxVal)
