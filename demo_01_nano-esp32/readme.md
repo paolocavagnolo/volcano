@@ -1,10 +1,15 @@
 # NANO ESP32 with MPY DEMO
 
 ## VERY IMPORTANT
+
+### NOTE 1
 The [Grove Shield for Arduino Nano](https://store.arduino.cc/products/grove-shield-for-arduino-nano?queryID=undefined) used for the demo has the RST pin on the left side **linked** with the RST pin on the right side,
 thats is ok for a normal Arduino Nano, but for the Nano ESP32, on the right side there is the B1 pin, used to put the board in Bootloader mode.
 
 So, if you press reset on the Nano ESP32 while it is connected to the shield it will enter in bootloader mode. To avoid this I've cut the RST pin on the Nano board
+
+### NOTE 2
+If you want to change the sketch during the demo is mandatory to **close the Arduino IDE before connecting with the Arduino Labs for Micropython**.
 
 ## CONNECTIONS
 
