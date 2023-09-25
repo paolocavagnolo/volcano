@@ -1,13 +1,12 @@
-''' List of sensors :
-
-  A0 Potentiometer INPUT
-    A2 LDR INPUT
-      A5 Mic INPUT
-        I2C LIS3DH_I2C INPUT
-          D2 Led OUTPUT
-            D4 Buzzer OUTPUT
-              D6 Button OUTPUT
-'''
+/* List of sensors :
+  A0      Potentiometer   INPUT
+  A2      LDR             INPUT
+  A5      Mic             INPUT
+  I2C     LIS3DH_I2C      INPUT
+  D2      Led             OUTPUT
+  D4      Buzzer          OUTPUT
+  D6      Button          OUTPUT
+*/
 
 #define pot A0
 #define ldr A2
