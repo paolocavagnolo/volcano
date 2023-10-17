@@ -1,2 +1,2 @@
-#define SECRET_SSID "w4rm4ndc0ld"
-#define SECRET_OPTIONAL_PASS "ciao56ciao"
+#define SECRET_SSID "wifi_name"
+#define SECRET_OPTIONAL_PASS "wifi_password"
