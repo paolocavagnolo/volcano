@@ -502,7 +502,10 @@ void loop() {
         c_pir = false;
       }
 
-      if (!((t_max < 35) || (t_min > 10))) {
+
+      if ((t_max == 35) && (t_min == 10)) {
+        bool manual_mode = true;
+      } else {
         if (!heat) {
           // COOLING
           if (t_max < c_temperature) {
