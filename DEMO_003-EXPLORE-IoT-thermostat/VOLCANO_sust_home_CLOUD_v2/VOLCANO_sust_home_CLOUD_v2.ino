@@ -123,6 +123,10 @@ unsigned long tUpdateFast = 0;
 bool heat = false;
 
 bool auto_res_heat = false;
+bool cooling_on = false;
+bool heating_on = false;
+
+bool primo = true;
 
 void loop() {
 
@@ -191,6 +195,7 @@ void loop() {
     if (btnOn == 4) {
       carrier.Relay1.open();
       if (heat) {
+        heating_on = true;
         carrier.display.fillScreen(ST77XX_BLACK);
         carrier.display.drawBitmap(0, 0, c_frame, 240, 240, ST77XX_RED);
         carrier.display.drawBitmap(70, 50, r_open, 100, 37, ST77XX_RED);
@@ -203,6 +208,7 @@ void loop() {
         fill_solid(leds, NUM_LEDS, CRGB::Red);
         FastLED.show();
       } else {
+        cooling_on = true;
         carrier.display.fillScreen(ST77XX_BLACK);
         carrier.display.drawBitmap(0, 0, c_frame, 240, 240, ST77XX_BLUE);
         carrier.display.drawBitmap(70, 50, r_open, 100, 37, ST77XX_BLUE);
@@ -299,6 +305,7 @@ void loop() {
       carrier.Relay1.close();
 
       if (heat) {
+        heating_on = false;
         carrier.display.fillScreen(ST77XX_BLACK);
         carrier.display.drawBitmap(0, 0, c_frame, 240, 240, ST77XX_RED);
         carrier.display.drawBitmap(70, 50, r_close, 100, 37, ST77XX_RED);
@@ -310,6 +317,7 @@ void loop() {
         carrier.display.print("HEATING OFF");
 
       } else {
+        cooling_on = false;
         carrier.display.fillScreen(ST77XX_BLACK);
         carrier.display.drawBitmap(0, 0, c_frame, 240, 240, ST77XX_BLUE);
         carrier.display.drawBitmap(70, 50, r_close, 100, 37, ST77XX_BLUE);
@@ -381,7 +389,7 @@ void loop() {
         carrier.display.fillScreen(ST77XX_BLACK);  //oled clear()
         carrier.display.drawBitmap(0, 0, c_frame, 240, 240, ST77XX_RED);
         carrier.display.drawBitmap(72, 20, temp_icon, 100, 148, ST77XX_RED);
-        temp = carrier.Env.readTemperature();
+        temp = carrier.Env.readTemperature() - 4.1;
         carrier.display.setCursor(60, 170);
         carrier.display.setTextColor(ST77XX_RED);
         carrier.display.setTextSize(3);
@@ -422,8 +430,6 @@ void loop() {
           carrier.display.setCursor(60, 170);
           carrier.display.print("very dry");
         }
-        
-
       }
       if (sens_n >= 2) {
         sens_n = 0;
@@ -454,24 +460,85 @@ void loop() {
     }
   }
 
-  ArduinoCloud.update();
 
-  if ((millis() - tUpdateSlow) > 10000) {
-    tUpdateSlow = millis();
-    fileRead();
-    c_people = n_people;
-    c_temperature = carrier.Env.readTemperature();
-    c_humidity = carrier.Env.readHumidity();
-    c_moisture = analogRead(A0);
-  }
 
-  if ((millis() - tUpdateFast) > 1000) {
-    tUpdateFast = millis();
-    if (analogRead(A6) > 1000) {
-      c_pir = true;
+  if (primo) {
+    primo = false;
+
+    c_rel_1 = false;
+    c_rel_2 = false;
+    c_pir = false;
+    heating_on = false;
+    cooling_on = false;
+    heat = true;
+    t_max = 35;
+    t_min = 10;
+
+  } else {
+    ArduinoCloud.update();
+
+    if (auto_res_heat) {
+      auto_res_heat = false;
+      old_btnOn = 2;
+      btnState[2] = false;
+      changeOff = true;
     }
-    if (analogRead(A6) < 100) {
-      c_pir = false;
+
+    if ((millis() - tUpdateSlow) > 10000) {
+      tUpdateSlow = millis();
+      fileRead();
+      c_people = n_people;
+      c_temperature = carrier.Env.readTemperature() - 4.1;
+      c_humidity = carrier.Env.readHumidity();
+      c_moisture = analogRead(A0);
+    }
+
+    if ((millis() - tUpdateFast) > 1000) {
+      tUpdateFast = millis();
+      if (analogRead(A6) > 1000) {
+        c_pir = true;
+      }
+      if (analogRead(A6) < 100) {
+        c_pir = false;
+      }
+
+      if (!((t_max < 35) || (t_min > 10))) {
+        if (!heat) {
+          // COOLING
+          if (t_max < c_temperature) {
+            if (!cooling_on) {
+              btnOn = 4;
+              btnState[4] = true;
+              changeOn = true;
+              c_rel_1 = true;
+            }
+          } else {
+            if (cooling_on) {
+              old_btnOn = 4;
+              btnState[4] = false;
+              changeOff = true;
+              c_rel_1 = false;
+            }
+          }
+        } else {
+          // HEATING
+          if (t_min > c_temperature) {
+            if (!heating_on) {
+              btnOn = 4;
+              btnState[4] = true;
+              changeOn = true;
+              c_rel_1 = true;
+            }
+          } else {
+            if (heating_on) {
+              old_btnOn = 4;
+              btnState[4] = false;
+              changeOff = true;
+              c_rel_1 = false;
+            }
+          }
+        }
+      }
     }
   }
 
@@ -560,28 +627,4 @@ void onCHeatChange() {
     changeOn = true;
   }
   auto_res_heat = true;
-}
-
-void onTMaxChange()  {
-  if (t_max < c_temperature) {
-    // Attivare il raffrescamento
-    heat = true;
-    changeOn = true;
-    btnOn = 4;
-    btnState[4] = true;
-    changeOn = true;
-  } else {
-    
-  }
-}
-
-void onTMinChange()  {
-  if (t_min > c_temperature) {
-    // Attivare il riscaldamento
-    heat = false;
-    changeOn = true;
-    btnOn = 4;
-    btnState[4] = true;
-    changeOn = true;
-  }
 }

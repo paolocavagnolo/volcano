@@ -9,8 +9,6 @@ const char PASS[]     = SECRET_OPTIONAL_PASS;    // Network password (use for WP
 void onCRel1Change();
 void onCRel2Change();
 void onCHeatChange();
-void onTMaxChange();
-void onTMinChange();
 
 float c_temperature;
 float c_humidity;
@@ -35,8 +33,8 @@ void initProperties(){
   ArduinoCloud.addProperty(c_rel_2, READWRITE, ON_CHANGE, onCRel2Change);
   ArduinoCloud.addProperty(c_heat, READWRITE, ON_CHANGE, onCHeatChange);
 
-  ArduinoCloud.addProperty(t_max, READWRITE, ON_CHANGE, onTMaxChange);
-  ArduinoCloud.addProperty(t_min, READWRITE, ON_CHANGE, onTMinChange);
+  ArduinoCloud.addProperty(t_max, READWRITE, 1 * SECONDS, NULL);
+  ArduinoCloud.addProperty(t_min, READWRITE, 1 * SECONDS, NULL);
 
 }
 
