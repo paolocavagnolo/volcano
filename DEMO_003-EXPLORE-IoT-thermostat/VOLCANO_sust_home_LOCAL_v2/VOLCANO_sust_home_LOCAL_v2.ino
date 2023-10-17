@@ -76,6 +76,9 @@ unsigned long tUpdateFast = 0;
 
 bool heat = false;
 
+bool cooling_on = false;
+bool heating_on = false;
+
 void loop() {
 
   carrier.Buttons.update();
@@ -143,6 +146,7 @@ void loop() {
     if (btnOn == 4) {
       carrier.Relay1.open();
       if (heat) {
+        heating_on = true;
         carrier.display.fillScreen(ST77XX_BLACK);
         carrier.display.drawBitmap(0, 0, c_frame, 240, 240, ST77XX_RED);
         carrier.display.drawBitmap(70, 50, r_open, 100, 37, ST77XX_RED);
@@ -155,6 +159,7 @@ void loop() {
         fill_solid(leds, NUM_LEDS, CRGB::Red);
         FastLED.show();
       } else {
+        cooling_on = true;
         carrier.display.fillScreen(ST77XX_BLACK);
         carrier.display.drawBitmap(0, 0, c_frame, 240, 240, ST77XX_BLUE);
         carrier.display.drawBitmap(70, 50, r_open, 100, 37, ST77XX_BLUE);
@@ -186,6 +191,7 @@ void loop() {
       carrier.display.print("2 OPEN");
       carrier.display.setCursor(40, 150);
       carrier.display.print("LIGHT ON");
+
 
       tBlack = millis();
       fBlack = true;
@@ -250,6 +256,7 @@ void loop() {
       carrier.Relay1.close();
 
       if (heat) {
+        heating_on = false;
         carrier.display.fillScreen(ST77XX_BLACK);
         carrier.display.drawBitmap(0, 0, c_frame, 240, 240, ST77XX_RED);
         carrier.display.drawBitmap(70, 50, r_close, 100, 37, ST77XX_RED);
@@ -261,6 +268,7 @@ void loop() {
         carrier.display.print("HEATING OFF");
 
       } else {
+        cooling_on = false;
         carrier.display.fillScreen(ST77XX_BLACK);
         carrier.display.drawBitmap(0, 0, c_frame, 240, 240, ST77XX_BLUE);
         carrier.display.drawBitmap(70, 50, r_close, 100, 37, ST77XX_BLUE);
@@ -332,7 +340,7 @@ void loop() {
         carrier.display.fillScreen(ST77XX_BLACK);  //oled clear()
         carrier.display.drawBitmap(0, 0, c_frame, 240, 240, ST77XX_RED);
         carrier.display.drawBitmap(72, 20, temp_icon, 100, 148, ST77XX_RED);
-        temp = carrier.Env.readTemperature();
+        temp = carrier.Env.readTemperature() - 4.1;
         carrier.display.setCursor(60, 170);
         carrier.display.setTextColor(ST77XX_RED);
         carrier.display.setTextSize(3);
@@ -353,13 +361,26 @@ void loop() {
       if (sens_n == 2) {
         carrier.display.fillScreen(ST77XX_BLACK);  //oled clear()
         carrier.display.drawBitmap(0, 0, c_frame, 240, 240, ST77XX_GREEN);
-        carrier.display.drawBitmap(68, 20, press_icon, 100, 148, ST77XX_GREEN);
-        press = carrier.Pressure.readPressure();
-        carrier.display.setCursor(45, 155);
+        carrier.display.drawBitmap(78, 25, plant_water, 86, 140, ST77XX_GREEN);
+        press = analogRead(A0);
         carrier.display.setTextColor(ST77XX_GREEN);
         carrier.display.setTextSize(3);
-        carrier.display.print(press);
-        carrier.display.print(" kPa");
+        if (press < 300) {
+          carrier.display.setCursor(60, 170);
+          carrier.display.print("very wet");
+        } else if (press < 400) {
+          carrier.display.setCursor(95, 170);
+          carrier.display.print("wet");
+        } else if (press < 600) {
+          carrier.display.setCursor(90, 170);
+          carrier.display.print("moist");
+        } else if (press < 800) {
+          carrier.display.setCursor(95, 170);
+          carrier.display.print("dry");
+        } else {
+          carrier.display.setCursor(60, 170);
+          carrier.display.print("very dry");
+        }
       }
       if (sens_n >= 2) {
         sens_n = 0;
