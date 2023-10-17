@@ -143,7 +143,7 @@ void loop() {
     carrier.leds.show();
 
     // RELAY-1 ON
-    if (btnOn == 4) {
+    if (btnOn == 3) {
       carrier.Relay1.open();
       if (heat) {
         heating_on = true;
@@ -179,7 +179,7 @@ void loop() {
     }
 
     // RELAY-2 ON
-    if (btnOn == 3) {
+    if (btnOn == 4) {
       carrier.Relay2.open();
 
       carrier.display.fillScreen(ST77XX_BLACK);
@@ -252,7 +252,7 @@ void loop() {
     carrier.leds.show();
 
     // RELAY-1 OFF
-    if (old_btnOn == 4) {
+    if (old_btnOn == 3) {
       carrier.Relay1.close();
 
       if (heat) {
@@ -288,7 +288,7 @@ void loop() {
     }
 
     // RELAY-2 OFF
-    if (old_btnOn == 3) {
+    if (old_btnOn == 4) {
       carrier.Relay2.close();
 
       carrier.display.fillScreen(ST77XX_BLACK);
