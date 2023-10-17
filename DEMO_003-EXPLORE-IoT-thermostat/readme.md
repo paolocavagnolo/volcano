@@ -22,7 +22,7 @@
 ### LOCAL
 
 In the local mode use the Buttons to activate the boards features or read the sensors values:
-![buttons]("imgs/btns.png")
+![buttons](imgs/btns.png)
 
 
 
