@@ -192,7 +192,7 @@ void loop() {
     carrier.leds.show();
 
     // RELAY-1 ON
-    if (btnOn == 4) {
+    if (btnOn == 3) {
       carrier.Relay1.open();
       if (heat) {
         heating_on = true;
@@ -228,7 +228,7 @@ void loop() {
     }
 
     // RELAY-2 ON
-    if (btnOn == 3) {
+    if (btnOn == 4) {
       carrier.Relay2.open();
 
       carrier.display.fillScreen(ST77XX_BLACK);
@@ -301,7 +301,7 @@ void loop() {
     carrier.leds.show();
 
     // RELAY-1 OFF
-    if (old_btnOn == 4) {
+    if (old_btnOn == 3) {
       carrier.Relay1.close();
 
       if (heat) {
@@ -337,7 +337,7 @@ void loop() {
     }
 
     // RELAY-2 OFF
-    if (old_btnOn == 3) {
+    if (old_btnOn == 4) {
       carrier.Relay2.close();
 
       carrier.display.fillScreen(ST77XX_BLACK);
@@ -510,15 +510,15 @@ void loop() {
           // COOLING
           if (t_max < c_temperature) {
             if (!cooling_on) {
-              btnOn = 4;
-              btnState[4] = true;
+              btnOn = 3;
+              btnState[3] = true;
               changeOn = true;
               c_rel_1 = true;
             }
           } else {
             if (cooling_on) {
-              old_btnOn = 4;
-              btnState[4] = false;
+              old_btnOn = 3;
+              btnState[3] = false;
               changeOff = true;
               c_rel_1 = false;
             }
@@ -527,15 +527,15 @@ void loop() {
           // HEATING
           if (t_min > c_temperature) {
             if (!heating_on) {
-              btnOn = 4;
-              btnState[4] = true;
+              btnOn = 3;
+              btnState[3] = true;
               changeOn = true;
               c_rel_1 = true;
             }
           } else {
             if (heating_on) {
-              old_btnOn = 4;
-              btnState[4] = false;
+              old_btnOn = 3;
+              btnState[3] = false;
               changeOff = true;
               c_rel_1 = false;
             }
@@ -591,12 +591,12 @@ void fileRead() {
 
 void onCRel1Change() {
   if (c_rel_1) {
-    btnOn = 4;
-    btnState[4] = true;
+    btnOn = 3;
+    btnState[3] = true;
     changeOn = true;
   } else {
-    old_btnOn = 4;
-    btnState[4] = false;
+    old_btnOn = 3;
+    btnState[3] = false;
     changeOff = true;
   }
 }
@@ -604,12 +604,12 @@ void onCRel1Change() {
 
 void onCRel2Change() {
   if (c_rel_2) {
-    btnOn = 3;
-    btnState[3] = true;
+    btnOn = 4;
+    btnState[4] = true;
     changeOn = true;
   } else {
-    old_btnOn = 3;
-    btnState[3] = false;
+    old_btnOn = 4;
+    btnState[4] = false;
     changeOff = true;
   }
 }
