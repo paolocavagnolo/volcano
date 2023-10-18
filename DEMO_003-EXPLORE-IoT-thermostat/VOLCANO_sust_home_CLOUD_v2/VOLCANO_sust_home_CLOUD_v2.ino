@@ -489,7 +489,7 @@ void loop() {
       fileRead();
       c_people = n_people;
       c_temperature = carrier.Env.readTemperature() - 4.1;
-      c_humidity = carrier.Env.readHumidity();
+      c_humidity = 1023 - carrier.Env.readHumidity();
       c_moisture = analogRead(A0);
     }
 
