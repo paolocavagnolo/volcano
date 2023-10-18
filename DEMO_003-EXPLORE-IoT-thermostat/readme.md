@@ -43,6 +43,12 @@ The app simulate a thermostat, if you want to manual control the heating or cool
 
 In the automatic mode the threshold slider control the actuators (heating or cooling) not the buttons. You can still use the buttons but the program will override it in 1 seconds.
 
+#### RESET THE VISITORS COUNTER
+To reset the visitors counter you need to **change the file name** in the first line of code of the "VOLCANO_sust_home_CLOUD_v2.ino" file. For example:
+
+from ```#define FILE_VISITORS_NAME "test3.txt"```
+
+to ```#define FILE_VISITORS_NAME "test4.txt"```
 
 
 
