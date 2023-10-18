@@ -1,3 +1,5 @@
+#define FILE_VISITORS_NAME "test3.txt"
+
 #include <Arduino_MKRIoTCarrier.h>
 MKRIoTCarrier carrier;
 #include <FastLED.h>
@@ -427,7 +429,7 @@ void drawExplore(uint16_t color) {
 
 void fileWrite() {
 
-  myFile = SD.open("test3.txt", FILE_WRITE);
+  myFile = SD.open(FILE_VISITORS_NAME, FILE_WRITE);
 
   if (myFile) {
     myFile.write("a");
@@ -440,7 +442,7 @@ void fileWrite() {
 void fileRead() {
   int n;
   String s = "";
-  myFile = SD.open("test3.txt");
+  myFile = SD.open(FILE_VISITORS_NAME);
 
   if (myFile) {
     while (myFile.available()) {
