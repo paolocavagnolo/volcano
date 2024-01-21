@@ -86,9 +86,9 @@ void loop() {
   carrier.Buttons.update();
 
   if (carrier.Buttons.getTouch(TOUCH0)) {
-    btnTcd = 0;
-  } else if (carrier.Buttons.getTouch(TOUCH1)) {
     btnTcd = 1;
+  } else if (carrier.Buttons.getTouch(TOUCH1)) {
+    btnTcd = 0;
   } else if (carrier.Buttons.getTouch(TOUCH2)) {
     btnTcd = 2;
   } else if (carrier.Buttons.getTouch(TOUCH3)) {
